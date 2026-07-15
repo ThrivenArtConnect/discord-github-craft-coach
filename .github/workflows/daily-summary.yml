@@ -1,0 +1,22 @@
+name: Daily GitHub Summary to Craft
+
+on:
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Generate Summary
+        env:
+          CRAFT_API_URL: ${{ secrets.CRAFT_API_URL }}
+          CRAFT_API_KEY: ${{ secrets.CRAFT_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/daily-summary.js
